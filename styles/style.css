@@ -7,23 +7,18 @@ html {
 }
 body {
     margin: 0;
-    background-color: brown;
 }
 
 #main {
     display: flex;
-    justify-content: center;
-    align-items: center;
     height: 100vh;
 }
 #board {
-    height: 500px;
-    width: 500px;
+    width: 700px;
+    height: 700px;
     display: flex;
     flex-wrap: wrap;
-    background-color: green;
-    margin: auto;
-}
-#board div {
     background-color: white;
+    margin: auto;
+    box-shadow: 0px 0px 14px 0px black;
 }

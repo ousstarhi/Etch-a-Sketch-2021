@@ -13,31 +13,34 @@ const blackBtn = document.querySelector('#black');
 // Scale mode button
 const scaleBtn = document.querySelector('#scale');
 
+// Resolution input
+const userRes = document.querySelector('form#size');
+
+// Resolution title
+const title = document.querySelector('h1');
+
 // Default drawin mode
 let mode = 'black';
 
 // Staring value of lightness for the scale mode
 let lightness = 97;
 
-// Number of pixels in the board
-const grid = 60 ** 2;
-
-// Creating the the pixels and appending them to the board
-for (let i = 0; i < grid; i++) {
-    const div = document.createElement('div');
-    div.style.width = `${(500 / 60)}px`;
-    div.style.height = `${(500 / 60)}px`;
-    board.appendChild(div);
-}
-
-// The pixels that was created
-const pixels = board.querySelectorAll('div');
+// The default grid
+let resolution = 16 ** 2;
+createGrid(resolution);
 
 // Clear the board
 clearBtn.addEventListener('click', () => {
+    const pixels = board.querySelectorAll('div');
     pixels.forEach((pixel) => {
         pixel.style.backgroundColor = 'white';
     });
+});
+
+// Changing the resolution
+userRes.addEventListener('submit', (e) => {
+    e.preventDefault();
+    changeResolution();
 });
 
 /* Choosing the mode  */
@@ -73,19 +76,20 @@ const n = colorPalette.length;
 let drawingState = false;
 
 /* Drawing Code */
-
 // Setting the drawing state to true and start drawin
 board.addEventListener('mousedown', (e) => {
     drawingState = true;
     // Drawing according to the mode
-    if (mode === 'random') {
-        const color = Math.floor(Math.random() * n);
-        e.target.style.backgroundColor = colorPalette[color];
-    } else if (mode === 'black') {
-        e.target.style.backgroundColor = 'black';
-    } else if (mode === 'scale') {
-        lightness = 97;
-        e.target.style.backgroundColor = `hsl(0, 0%, ${lightness}%)`;
+    switch (mode) {
+        case 'random':
+            drawRandom(e);
+            break;
+        case 'black':
+            drawBlack(e);
+            break;
+        case 'scale':
+            lightness = 97;
+            drawScale(e, lightness);
     }
 });
 
@@ -93,14 +97,16 @@ board.addEventListener('mousedown', (e) => {
 board.addEventListener('mousemove', (e) => {
     if (drawingState === true) {
         // Drawing according to the mode
-        if (mode === 'random') {
-            const color = Math.floor(Math.random() * n);
-            e.target.style.backgroundColor = colorPalette[color];
-        } else if (mode === 'black') {
-            e.target.style.backgroundColor = 'black';
-        } else if (mode === 'scale') {
-            e.target.style.backgroundColor = `hsl(0, 0%, ${lightness}%)`;
-            lightness -= 0.5;
+        switch (mode) {
+            case 'random':
+                drawRandom(e);
+                break;
+            case 'black':
+                drawBlack(e);
+                break;
+            case 'scale':
+                drawScale(e, lightness);
+                lightness -= 0.5;
         }
     }
 });
@@ -109,3 +115,53 @@ board.addEventListener('mousemove', (e) => {
 board.addEventListener('mouseup', () => {
     drawingState = false;
 });
+
+
+// Grid creation function
+function createGrid(res) {
+    for (let i = 0; i < res; i++) {
+        const div = document.createElement('div');
+        div.style.width = `${(700 / (res ** (1 / 2)))}px`;
+        div.style.height = `${(700 / (res ** (1 / 2)))}px`;
+        board.appendChild(div);
+    }
+}
+
+// Drawing functions
+// Random colors
+function drawRandom(e) {
+    if (e.target !== board) {
+        const color = Math.floor(Math.random() * n);
+        e.target.style.backgroundColor = colorPalette[color];
+    }
+}
+// Black color
+function drawBlack(e) {
+    if (e.target !== board) {
+        e.target.style.backgroundColor = 'black';
+    }
+}
+// Scale mode
+function drawScale(e, lightness) {
+    if (e.target !== board) {
+        e.target.style.backgroundColor = `hsl(0, 0%, ${lightness}%)`;
+    }
+}
+
+// Changing Resolution
+function changeResolution() {
+    const pixels = board.querySelectorAll('div');
+    pixels.forEach((pixel) => {
+        pixel.remove();
+    });
+    let value = userRes.firstElementChild.value;
+    if (value > 100) {
+        alert('The limit is 100');
+        userRes.firstElementChild.value = '';
+        return;
+    }
+    resolution = value ** 2;
+    title.textContent = `Resolution: ${value} x ${value}`;
+    userRes.firstElementChild.value = '';
+    createGrid(resolution);
+}
