@@ -1,0 +1,22 @@
+html {
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+}
+*, *:before, *:after {
+    box-sizing: inherit;
+}
+body {
+    margin: 0;
+    background-color: brown;
+}
+
+#main {
+    height: 204px;
+    width: 204px;
+    display: flex;
+    flex-wrap: wrap;
+    background-color: green;
+}
+#main div {
+    background-color: grey;
+}
