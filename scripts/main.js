@@ -10,8 +10,14 @@ const randomBtn = document.querySelector('#random');
 // Black mode button
 const blackBtn = document.querySelector('#black');
 
+// Scale mode button
+const scaleBtn = document.querySelector('#scale');
+
 // Default drawin mode
 let mode = 'black';
+
+// Staring value of lightness for the scale mode
+let lightness = 97;
 
 // Number of pixels in the board
 const grid = 60 ** 2;
@@ -30,7 +36,7 @@ const pixels = board.querySelectorAll('div');
 // Clear the board
 clearBtn.addEventListener('click', () => {
     pixels.forEach((pixel) => {
-        pixel.style.backgroundColor = 'grey';
+        pixel.style.backgroundColor = 'white';
     });
 });
 
@@ -43,7 +49,10 @@ blackBtn.addEventListener('click', () => {
 randomBtn.addEventListener('click', () => {
     mode = 'random';
 });
-
+// Scale mode
+scaleBtn.addEventListener('click', () => {
+    mode = 'scale';
+});
 
 // The color palette to choose a random color in each mouse movement
 const colorPalette = [
@@ -54,13 +63,16 @@ const colorPalette = [
     'orange',
     'brown',
     'purple',
-    'orchid'];
+    'orchid'
+];
 
 // The number of colors in the color pallette
 const n = colorPalette.length;
 
 // Setting the default darwin state to false
 let drawingState = false;
+
+/* Drawing Code */
 
 // Setting the drawing state to true and start drawin
 board.addEventListener('mousedown', (e) => {
@@ -71,6 +83,9 @@ board.addEventListener('mousedown', (e) => {
         e.target.style.backgroundColor = colorPalette[color];
     } else if (mode === 'black') {
         e.target.style.backgroundColor = 'black';
+    } else if (mode === 'scale') {
+        lightness = 97;
+        e.target.style.backgroundColor = `hsl(0, 0%, ${lightness}%)`;
     }
 });
 
@@ -83,11 +98,14 @@ board.addEventListener('mousemove', (e) => {
             e.target.style.backgroundColor = colorPalette[color];
         } else if (mode === 'black') {
             e.target.style.backgroundColor = 'black';
+        } else if (mode === 'scale') {
+            e.target.style.backgroundColor = `hsl(0, 0%, ${lightness}%)`;
+            lightness -= 0.5;
         }
     }
 });
 
 // Stop drawing when the mouse is released
-board.addEventListener('mouseup', (e) => {
+board.addEventListener('mouseup', () => {
     drawingState = false;
 });
