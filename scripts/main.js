@@ -132,6 +132,12 @@ function createGrid(res) {
 function drawRandom(e) {
     if (e.target !== board) {
         const color = Math.floor(Math.random() * n);
+        const divStyles = window.getComputedStyle(e.target, null);
+        const divBgcolor = divStyles.getPropertyValue('background-color');
+        console.log(divBgcolor);
+        if (divBgcolor !== 'rgba(0, 0, 0, 0)' && divBgcolor !== 'rgb(255, 255, 255)') {
+            return;
+        }
         e.target.style.backgroundColor = colorPalette[color];
     }
 }
