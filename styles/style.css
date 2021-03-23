@@ -7,11 +7,55 @@ html {
 }
 body {
     margin: 0;
+    background: linear-gradient(to right, #240b36, #c31432);
+}
+
+div#buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px;
+}
+
+div#buttons button {
+    margin: 15px;
+    height: 50px;
+    border: 0;
+    background: cyan;
+    cursor: pointer;
+}
+
+div#buttons button:focus {
+    border: 0;
+    outline: none;
+}
+
+div#form {
+    text-align: center;
+    margin: 20px;
+}
+
+input {
+    height: 36px;
+    width: 228px;
+    border-radius: 20px;
+    border: 0;
+    padding-left: 20px;
+    font-size: 16px;
+    background-color: greenyellow;
+}
+
+input:focus {
+    outline: none;
+}
+
+h1 {
+    text-align: center;
 }
 
 #main {
     display: flex;
-    height: 100vh;
+    margin-bottom: 10px;
 }
 #board {
     width: 700px;
