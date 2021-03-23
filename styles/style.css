@@ -106,4 +106,5 @@ div#buttons button:focus, #form button{
     flex-wrap: wrap;
     background-color: white;
     box-shadow: 0px 0px 14px 0px black;
+    cursor: url('../media/pencil-cursor.png'), crosshair;
 }
