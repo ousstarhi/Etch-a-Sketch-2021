@@ -40,6 +40,9 @@ clearBtn.addEventListener('click', () => {
 // Changing the resolution
 userRes.addEventListener('submit', (e) => {
     e.preventDefault();
+    if (!userRes.firstElementChild.value) {
+        return;
+    }
     changeResolution();
 });
 
