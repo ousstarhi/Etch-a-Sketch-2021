@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap');
+
 html {
     box-sizing: border-box;
     scroll-behavior: smooth;
@@ -8,6 +10,7 @@ html {
 body {
     margin: 0;
     background: linear-gradient(to right, #240b36, #c31432);
+    font-family: 'Patrick Hand', cursive;
 }
 
 div#wrapper {
@@ -26,9 +29,11 @@ input {
     border-radius: 5px;
     border: 0;
     padding-left: 20px;
-    font-size: 16px;
+    font-size: 22px;
     font-weight: bolder;
     background-color: #5D0F4C;
+    font-family: inherit;
+    color: white;
 }
 
 input:focus {
@@ -47,6 +52,9 @@ h1 {
     background: #9B4D8A;
     cursor: pointer;
     border-radius: 5px;
+    font-family: inherit;
+    font-size: 22px;
+    font-weight: bolder;
 }
 
 #main {
@@ -65,14 +73,25 @@ div#buttons {
     margin: 0 50px 0 100px;
 }
 
+
 div#buttons button {
-    width: 100px;
+    width: 150px;
     margin: 15px 0;
     height: 50px;
     border: 0;
     background: #9B4D8A;
     cursor: pointer;
     border-radius: 5px;
+    font-family: inherit;
+    font-size: 22px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+img {
+    width: 20%;
 }
 
 div#buttons button:focus, #form button{
@@ -87,4 +106,5 @@ div#buttons button:focus, #form button{
     flex-wrap: wrap;
     background-color: white;
     box-shadow: 0px 0px 14px 0px black;
+    cursor: url('../media/pencil-cursor.png'), crosshair;
 }
