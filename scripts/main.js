@@ -27,13 +27,14 @@ let lightness = 97;
 
 // The default grid
 let resolution = 16 ** 2;
+let boardChildren = board.childNodes;
 createGrid(resolution);
 
 // Clear the board
 clearBtn.addEventListener('click', () => {
     const pixels = board.querySelectorAll('div');
     pixels.forEach((pixel) => {
-        pixel.style.backgroundColor = 'white';
+        pixel.style.backgroundColor = 'rgb(255, 255, 255)';
         lightness = 97;
     });
 });
@@ -46,6 +47,22 @@ userRes.addEventListener('submit', (e) => {
     }
     changeResolution();
     lightness = 97;
+    boardChildren.forEach(div => {
+        div.addEventListener('mouseenter', (e) => {
+            if (!drawingState) {
+                if(e.target.style.backgroundColor === 'rgb(255, 255, 255)') {
+                    e.target.style.backgroundColor = 'rgb(230, 230, 230)';
+                }
+            }
+        });
+        div.addEventListener('mouseleave', (e) => {
+            if (!drawingState) {
+                if(e.target.style.backgroundColor === 'rgb(230, 230, 230)') {
+                    e.target.style.backgroundColor = 'rgb(255, 255, 255)';
+                }
+            }
+        });
+    });
 });
 
 /* Choosing the mode  */
@@ -88,6 +105,16 @@ board.addEventListener('click', (e) => {
         drawingState = false;
     } else {
         drawingState = true;
+        switch (mode) {
+            case 'random':
+                drawRandom(e);
+                break;
+            case 'black':
+                drawBlack(e);
+                break;
+            case 'scale':
+                e.target.style.backgroundColor = 'rgb(230, 230, 230)';
+        }
     }
 });
 // Start drawing on hover
@@ -102,14 +129,59 @@ board.addEventListener('mouseover', (e) => {
                 break;
             case 'scale':
                 drawScale2(e);
-                // drawScale(e, lightness);
-                // lightness -= 0.5;
-                // const divStyles = window.getComputedStyle(e.target, null);
-                // const divBgcolor = divStyles.getPropertyValue('background-color');
-                // console.log(divBgcolor);
         }
     }
 });
+
+// Add an effect on mouse over when drawingState is false
+boardChildren.forEach(div => {
+    div.addEventListener('mouseenter', (e) => {
+        if (!drawingState) {
+            if(e.target.style.backgroundColor === 'rgb(255, 255, 255)') {
+                e.target.style.backgroundColor = 'rgb(230, 230, 230)';
+            }
+        }
+    });
+    div.addEventListener('mouseleave', (e) => {
+        if (!drawingState) {
+            if(e.target.style.backgroundColor === 'rgb(230, 230, 230)') {
+                e.target.style.backgroundColor = 'rgb(255, 255, 255)';
+            }
+        }
+    });
+});
+
+// Grid creation function
+function createGrid(res) {
+    for (let i = 0; i < res; i++) {
+        const div = document.createElement('div');
+        div.style.width = `${(700 / (res ** (1 / 2)))}px`;
+        div.style.height = `${(700 / (res ** (1 / 2)))}px`;
+        div.style.backgroundColor = 'rgb(255, 255, 255)'
+        board.appendChild(div);
+        boardChildren = board.childNodes;
+    }
+}
+
+// Drawing functions
+// Random colors
+function drawRandom(e) {
+    if (e.target !== board) {
+        const color = Math.floor(Math.random() * n);
+        const divStyles = window.getComputedStyle(e.target, null);
+        const divBgcolor = divStyles.getPropertyValue('background-color');
+        // if (divBgcolor !== 'rgba(0, 0, 0, 0)' && divBgcolor !== 'rgb(255, 255, 255)') {
+        //     return;
+        // }
+        e.target.style.backgroundColor = colorPalette[color];
+    }
+}
+// Black color
+function drawBlack(e) {
+    if (e.target !== board) {
+        e.target.style.backgroundColor = 'black';
+    }
+}
 
 // Scale mode version 2
 function drawScale2(e) {
@@ -124,43 +196,12 @@ function drawScale2(e) {
         const blue = +values[2];
         if (red === green && red === blue && red !== 0) {
             e.target.style.backgroundColor = `rgb(${red - 25}, ${green - 25}, ${blue - 25})`;
-            console.log(e.target.style.backgroundColor);
         } else {
             return;
         }
     }
 }
 
-// Grid creation function
-function createGrid(res) {
-    for (let i = 0; i < res; i++) {
-        const div = document.createElement('div');
-        div.style.width = `${(700 / (res ** (1 / 2)))}px`;
-        div.style.height = `${(700 / (res ** (1 / 2)))}px`;
-        div.style.backgroundColor = 'rgb(255, 255, 255)'
-        board.appendChild(div);
-    }
-}
-
-// Drawing functions
-// Random colors
-function drawRandom(e) {
-    if (e.target !== board) {
-        const color = Math.floor(Math.random() * n);
-        const divStyles = window.getComputedStyle(e.target, null);
-        const divBgcolor = divStyles.getPropertyValue('background-color');
-        if (divBgcolor !== 'rgba(0, 0, 0, 0)' && divBgcolor !== 'rgb(255, 255, 255)') {
-            return;
-        }
-        e.target.style.backgroundColor = colorPalette[color];
-    }
-}
-// Black color
-function drawBlack(e) {
-    if (e.target !== board) {
-        e.target.style.backgroundColor = 'black';
-    }
-}
 // Scale mode
 function drawScale(e, lightness) {
     if (e.target !== board) {
