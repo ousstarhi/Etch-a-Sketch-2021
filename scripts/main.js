@@ -27,13 +27,15 @@ let lightness = 97;
 
 // The default grid
 let resolution = 16 ** 2;
+let boardChildren = board.childNodes;
 createGrid(resolution);
 
 // Clear the board
 clearBtn.addEventListener('click', () => {
     const pixels = board.querySelectorAll('div');
     pixels.forEach((pixel) => {
-        pixel.style.backgroundColor = 'white';
+        pixel.style.backgroundColor = 'rgb(255, 255, 255)';
+        lightness = 97;
     });
 });
 
@@ -44,6 +46,23 @@ userRes.addEventListener('submit', (e) => {
         return;
     }
     changeResolution();
+    lightness = 97;
+    boardChildren.forEach(div => {
+        div.addEventListener('mouseenter', (e) => {
+            if (!drawingState) {
+                if(e.target.style.backgroundColor === 'rgb(255, 255, 255)') {
+                    e.target.style.backgroundColor = 'rgb(230, 230, 230)';
+                }
+            }
+        });
+        div.addEventListener('mouseleave', (e) => {
+            if (!drawingState) {
+                if(e.target.style.backgroundColor === 'rgb(230, 230, 230)') {
+                    e.target.style.backgroundColor = 'rgb(255, 255, 255)';
+                }
+            }
+        });
+    });
 });
 
 /* Choosing the mode  */
@@ -58,6 +77,7 @@ randomBtn.addEventListener('click', () => {
 // Scale mode
 scaleBtn.addEventListener('click', () => {
     mode = 'scale';
+    lightness = 97;
 });
 
 // The color palette to choose a random color in each mouse movement
@@ -79,27 +99,12 @@ const n = colorPalette.length;
 let drawingState = false;
 
 /* Drawing Code */
-// Setting the drawing state to true and start drawin
-board.addEventListener('mousedown', (e) => {
-    drawingState = true;
-    // Drawing according to the mode
-    switch (mode) {
-        case 'random':
-            drawRandom(e);
-            break;
-        case 'black':
-            drawBlack(e);
-            break;
-        case 'scale':
-            lightness = 97;
-            drawScale(e, lightness);
-    }
-});
-
-// Continue drawing while the mouse is down and in move
-board.addEventListener('mousemove', (e) => {
-    if (drawingState === true) {
-        // Drawing according to the mode
+// Toggling drawing state
+board.addEventListener('click', (e) => {
+    if (drawingState) {
+        drawingState = false;
+    } else {
+        drawingState = true;
         switch (mode) {
             case 'random':
                 drawRandom(e);
@@ -108,17 +113,43 @@ board.addEventListener('mousemove', (e) => {
                 drawBlack(e);
                 break;
             case 'scale':
-                drawScale(e, lightness);
-                lightness -= 0.5;
+                e.target.style.backgroundColor = 'rgb(230, 230, 230)';
+        }
+    }
+});
+// Start drawing on hover
+board.addEventListener('mouseover', (e) => {
+    if (drawingState) {
+        switch (mode) {
+            case 'random':
+                drawRandom(e);
+                break;
+            case 'black':
+                drawBlack(e);
+                break;
+            case 'scale':
+                drawScale2(e);
         }
     }
 });
 
-// Stop drawing when the mouse is released
-board.addEventListener('mouseup', () => {
-    drawingState = false;
+// Add an effect on mouse over when drawingState is false
+boardChildren.forEach(div => {
+    div.addEventListener('mouseenter', (e) => {
+        if (!drawingState) {
+            if(e.target.style.backgroundColor === 'rgb(255, 255, 255)') {
+                e.target.style.backgroundColor = 'rgb(230, 230, 230)';
+            }
+        }
+    });
+    div.addEventListener('mouseleave', (e) => {
+        if (!drawingState) {
+            if(e.target.style.backgroundColor === 'rgb(230, 230, 230)') {
+                e.target.style.backgroundColor = 'rgb(255, 255, 255)';
+            }
+        }
+    });
 });
-
 
 // Grid creation function
 function createGrid(res) {
@@ -126,7 +157,9 @@ function createGrid(res) {
         const div = document.createElement('div');
         div.style.width = `${(700 / (res ** (1 / 2)))}px`;
         div.style.height = `${(700 / (res ** (1 / 2)))}px`;
+        div.style.backgroundColor = 'rgb(255, 255, 255)'
         board.appendChild(div);
+        boardChildren = board.childNodes;
     }
 }
 
@@ -137,10 +170,9 @@ function drawRandom(e) {
         const color = Math.floor(Math.random() * n);
         const divStyles = window.getComputedStyle(e.target, null);
         const divBgcolor = divStyles.getPropertyValue('background-color');
-        console.log(divBgcolor);
-        if (divBgcolor !== 'rgba(0, 0, 0, 0)' && divBgcolor !== 'rgb(255, 255, 255)') {
-            return;
-        }
+        // if (divBgcolor !== 'rgba(0, 0, 0, 0)' && divBgcolor !== 'rgb(255, 255, 255)') {
+        //     return;
+        // }
         e.target.style.backgroundColor = colorPalette[color];
     }
 }
@@ -150,6 +182,26 @@ function drawBlack(e) {
         e.target.style.backgroundColor = 'black';
     }
 }
+
+// Scale mode version 2
+function drawScale2(e) {
+    if (e.target !== board) {
+        const divStyles = window.getComputedStyle(e.target, null);
+        const divBgColor = divStyles.getPropertyValue('background-color');
+        const start = divBgColor.indexOf('(') + 1;
+        const end = divBgColor.indexOf(')');
+        const values = divBgColor.slice(start, end).split(', ');
+        const red = +values[0];
+        const green = +values[1];
+        const blue = +values[2];
+        if (red === green && red === blue && red !== 0) {
+            e.target.style.backgroundColor = `rgb(${red - 25}, ${green - 25}, ${blue - 25})`;
+        } else {
+            return;
+        }
+    }
+}
+
 // Scale mode
 function drawScale(e, lightness) {
     if (e.target !== board) {
@@ -174,3 +226,43 @@ function changeResolution() {
     userRes.firstElementChild.value = '';
     createGrid(resolution);
 }
+
+// // Setting the drawing state to true and start drawin
+// board.addEventListener('mousedown', (e) => {
+//     drawingState = true;
+//     // Drawing according to the mode
+//     switch (mode) {
+//         case 'random':
+//             drawRandom(e);
+//             break;
+//         case 'black':
+//             drawBlack(e);
+//             break;
+//         case 'scale':
+//             lightness = 97;
+//             drawScale(e, lightness);
+//     }
+// });
+
+// // Continue drawing while the mouse is down and in move
+// board.addEventListener('mousemove', (e) => {
+//     if (drawingState === true) {
+//         // Drawing according to the mode
+//         switch (mode) {
+//             case 'random':
+//                 drawRandom(e);
+//                 break;
+//             case 'black':
+//                 drawBlack(e);
+//                 break;
+//             case 'scale':
+//                 drawScale(e, lightness);
+//                 lightness -= 0.5;
+//         }
+//     }
+// });
+
+// // Stop drawing when the mouse is released
+// board.addEventListener('mouseup', () => {
+//     drawingState = false;
+// });
