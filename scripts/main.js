@@ -101,14 +101,35 @@ board.addEventListener('mouseover', (e) => {
                 drawBlack(e);
                 break;
             case 'scale':
-                drawScale(e, lightness);
-                lightness -= 0.5;
-                const divStyles = window.getComputedStyle(e.target, null);
-                const divBgcolor = divStyles.getPropertyValue('background-color');
-                console.log(divBgcolor);
+                drawScale2(e);
+                // drawScale(e, lightness);
+                // lightness -= 0.5;
+                // const divStyles = window.getComputedStyle(e.target, null);
+                // const divBgcolor = divStyles.getPropertyValue('background-color');
+                // console.log(divBgcolor);
         }
     }
 });
+
+// Scale mode version 2
+function drawScale2(e) {
+    if (e.target !== board) {
+        const divStyles = window.getComputedStyle(e.target, null);
+        const divBgColor = divStyles.getPropertyValue('background-color');
+        const start = divBgColor.indexOf('(') + 1;
+        const end = divBgColor.indexOf(')');
+        const values = divBgColor.slice(start, end).split(', ');
+        const red = +values[0];
+        const green = +values[1];
+        const blue = +values[2];
+        if (red === green && red === blue && red !== 0) {
+            e.target.style.backgroundColor = `rgb(${red - 25}, ${green - 25}, ${blue - 25})`;
+            console.log(e.target.style.backgroundColor);
+        } else {
+            return;
+        }
+    }
+}
 
 // Grid creation function
 function createGrid(res) {
@@ -116,6 +137,7 @@ function createGrid(res) {
         const div = document.createElement('div');
         div.style.width = `${(700 / (res ** (1 / 2)))}px`;
         div.style.height = `${(700 / (res ** (1 / 2)))}px`;
+        div.style.backgroundColor = 'rgb(255, 255, 255)'
         board.appendChild(div);
     }
 }
@@ -127,7 +149,6 @@ function drawRandom(e) {
         const color = Math.floor(Math.random() * n);
         const divStyles = window.getComputedStyle(e.target, null);
         const divBgcolor = divStyles.getPropertyValue('background-color');
-        console.log(divBgcolor);
         if (divBgcolor !== 'rgba(0, 0, 0, 0)' && divBgcolor !== 'rgb(255, 255, 255)') {
             return;
         }
