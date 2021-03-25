@@ -209,9 +209,6 @@ function drawRandom(e) {
         const color = Math.floor(Math.random() * n);
         const divStyles = window.getComputedStyle(e.target, null);
         const divBgcolor = divStyles.getPropertyValue('background-color');
-        // if (divBgcolor !== 'rgba(0, 0, 0, 0)' && divBgcolor !== 'rgb(255, 255, 255)') {
-        //     return;
-        // }
         e.target.style.backgroundColor = colorPalette[color];
     }
 }
@@ -265,43 +262,3 @@ function changeResolution() {
     userRes.firstElementChild.value = '';
     createGrid(resolution);
 }
-
-// // Setting the drawing state to true and start drawin
-// board.addEventListener('mousedown', (e) => {
-//     drawingState = true;
-//     // Drawing according to the mode
-//     switch (mode) {
-//         case 'random':
-//             drawRandom(e);
-//             break;
-//         case 'black':
-//             drawBlack(e);
-//             break;
-//         case 'scale':
-//             lightness = 97;
-//             drawScale(e, lightness);
-//     }
-// });
-
-// // Continue drawing while the mouse is down and in move
-// board.addEventListener('mousemove', (e) => {
-//     if (drawingState === true) {
-//         // Drawing according to the mode
-//         switch (mode) {
-//             case 'random':
-//                 drawRandom(e);
-//                 break;
-//             case 'black':
-//                 drawBlack(e);
-//                 break;
-//             case 'scale':
-//                 drawScale(e, lightness);
-//                 lightness -= 0.5;
-//         }
-//     }
-// });
-
-// // Stop drawing when the mouse is released
-// board.addEventListener('mouseup', () => {
-//     drawingState = false;
-// });
