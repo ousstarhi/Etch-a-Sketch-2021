@@ -4,6 +4,15 @@ const board = document.querySelector('#board');
 // The clear button
 const clearBtn = document.querySelector('#clear');
 
+// Help button
+const helpBtn = document.querySelector('#help');
+
+// Instructions
+const instructions = document.querySelector('#instructions');
+
+// Close button
+const closeBtn = document.querySelector('#close');
+
 // Mode buttons wrapper
 const modeWrapper = document.querySelector('#mode-btns');
 
@@ -83,6 +92,16 @@ modeWrapper.addEventListener('click', (e) => {
             }
         });
     }
+});
+
+// Show the instructions
+helpBtn.addEventListener('click', () => {
+    instructions.classList.add('visible');
+});
+
+// Close the instructions
+closeBtn.addEventListener('click', (e) => {
+    e.target.parentElement.classList.remove('visible');
 });
 
 /* Choosing the mode  */

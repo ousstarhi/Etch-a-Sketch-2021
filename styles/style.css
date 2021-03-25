@@ -68,7 +68,7 @@ h1 {
 div#buttons {
     display: flex;
     justify-content: center;
-    align-items: flex-start;
+    align-items: center;
     flex-direction: column;
     margin: 0 50px 0 100px;
 }
@@ -89,13 +89,19 @@ div#buttons button {
     align-items: center;
     justify-content: space-evenly;
 }
+div#buttons button#help {
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    box-shadow: 0px 0px 20px 0px black;
+}
 
 div#buttons button.active {
     background-color: #7f1134;
     box-shadow: 0px 0px 8px 0px #040404;
 }
 
-img {
+button img {
     width: 20%;
 }
 
@@ -112,4 +118,27 @@ div#buttons button:focus, #form button{
     background-color: white;
     box-shadow: 0px 0px 14px 0px black;
     cursor: url('../media/pencil-cursor.png'), crosshair;
+}
+
+
+div#instructions {
+    position: absolute;
+    left: 250px;
+    top: 220px;
+    padding: 25px;
+    background-color: #7f1134;
+    border-radius: 5px;
+    box-shadow: 0px 0px 8px 0px #040404;
+    visibility: hidden;
+}
+
+div#instructions #close {
+    position: absolute;
+    left: 92%;
+    bottom: 80%;
+    cursor: pointer;
+}
+
+div#instructions.visible {
+    visibility: visible;
 }
