@@ -90,6 +90,11 @@ div#buttons button {
     justify-content: space-evenly;
 }
 
+div#buttons button.active {
+    background-color: #7f1134;
+    box-shadow: 0px 0px 8px 0px #040404;
+}
+
 img {
     width: 20%;
 }

@@ -4,6 +4,12 @@ const board = document.querySelector('#board');
 // The clear button
 const clearBtn = document.querySelector('#clear');
 
+// Mode buttons wrapper
+const modeWrapper = document.querySelector('#mode-btns');
+
+// Mode buttons list
+const modeBtns = document.querySelectorAll('#mode-btns button');
+
 // Random mode button
 const randomBtn = document.querySelector('#random');
 
@@ -63,6 +69,20 @@ userRes.addEventListener('submit', (e) => {
             }
         });
     });
+});
+
+
+// Adding and removinge active class from mode buttons
+modeWrapper.addEventListener('click', (e) => {
+    if (e.target.tagName === 'BUTTON') {
+        modeBtns.forEach(btn => {
+            if (btn === e.target) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
+    }
 });
 
 /* Choosing the mode  */
