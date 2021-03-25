@@ -130,6 +130,8 @@ div#instructions {
     border-radius: 5px;
     box-shadow: 0px 0px 8px 0px #040404;
     visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.1s ease;
 }
 
 div#instructions #close {
@@ -141,4 +143,5 @@ div#instructions #close {
 
 div#instructions.visible {
     visibility: visible;
+    opacity: 1;
 }
